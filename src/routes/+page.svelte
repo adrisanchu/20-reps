@@ -1,4 +1,6 @@
-<script>
+<script lang="ts">
+  import * as m from '$lib/paraglide/messages.js';
+  import LanguageSwitcher from '$lib/components/ui/LanguageSwitcher.svelte';
   // Dummy dataset
   const challengeData = {
     startDate: '2024-01-01',
@@ -51,34 +53,37 @@
 </script>
 
 <div class="min-h-screen">
-  <main class="container mx-auto px-4 py-16">
-    <h1 class="text-5xl font-bold text-center mb-12">20 Reps Challenge</h1>
+  <div class="fixed top-4 right-4 z-10">
+    <LanguageSwitcher />
+  </div>
+  <main class="container mx-auto px-4 py-10">
+    <h1 class="text-5xl font-bold text-center mb-12">{m.title()}</h1>
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-4xl mx-auto">
       <!-- Current Streak -->
       <div class="bg-white/10 backdrop-blur-lg rounded-xl p-4 text-center">
-        <h2 class="text-2xl font-semibold mb-2">Current Streak</h2>
+        <h2 class="text-2xl font-semibold mb-2">{m.current_streak_title()}</h2>
         <p class="text-6xl font-bold">
           {stats.currentStreak}
         </p>
-        <p class="text-lg mt-2">days</p>
+        <p class="text-lg mt-2">{m.current_streak_unit()}</p>
       </div>
 
       <!-- Total Workouts -->
       <div class="bg-white/10 backdrop-blur-lg rounded-xl p-4 text-center">
-        <h2 class="text-2xl font-semibold mb-2">Total Workouts</h2>
+        <h2 class="text-2xl font-semibold mb-2">{m.total_workouts_title()}</h2>
         <p class="text-6xl font-bold">
           {stats.totalWorkouts}
         </p>
-        <p class="text-lg mt-2">completed</p>
+        <p class="text-lg mt-2">{m.total_workouts_unit()}</p>
       </div>
 
       <!-- Remaining Days -->
       <div class="bg-white/10 backdrop-blur-lg rounded-xl p-4 text-center">
-        <h2 class="text-2xl font-semibold mb-2">Days Remaining</h2>
+        <h2 class="text-2xl font-semibold mb-2">{m.days_remaining_title()}</h2>
         <p class="text-6xl font-bold">
           {stats.remainingDays}
         </p>
-        <p class="text-lg mt-2">to go</p>
+        <p class="text-lg mt-2">{m.days_remaining_unit()}</p>
       </div>
     </div>
 
