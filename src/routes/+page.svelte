@@ -21,7 +21,7 @@
 
     // Sort workouts by date
     const sortedWorkouts = [...challengeData.workouts].sort(
-      (a, b) => new Date(b.date) - new Date(a.date)
+      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
     );
 
     // Calculate current streak
@@ -31,7 +31,7 @@
     for (let workout of sortedWorkouts) {
       const workoutDate = new Date(workout.date);
       const dayDiff = Math.floor(
-        (currentDate - workoutDate) / (1000 * 60 * 60 * 24)
+        (currentDate.getTime() - workoutDate.getTime()) / (1000 * 60 * 60 * 24)
       );
 
       if (dayDiff <= 1) {
@@ -45,7 +45,9 @@
     return {
       currentStreak: streak,
       totalWorkouts: challengeData.workouts.length,
-      remainingDays: Math.ceil((endDate - today) / (1000 * 60 * 60 * 24)),
+      remainingDays: Math.ceil(
+        (endDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
+      ),
     };
   };
 
