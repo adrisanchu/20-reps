@@ -1,58 +1,59 @@
-import type { StravaTokenResponse, StravaActivity } from "$lib/types";
+import type { StravaTokenResponse, StravaActivity } from '$lib/types';
 
 export class Strava {
   private clientId: string;
   private clientSecret: string;
   public redirectUri: string;
+  public temporaryCode: string = '';
 
   constructor(clientId: string, clientSecret: string) {
     this.clientId = clientId;
     this.clientSecret = clientSecret;
-    this.redirectUri = "http://localhost:5173/strava"; // Update depending on devel or prod
+    this.redirectUri = 'http://localhost:5173/strava'; // Update depending on devel or prod
   }
 
   public getAuthorizeUrl(): URL {
-    const authUrl = new URL("https://www.strava.com/oauth/authorize");
-    authUrl.searchParams.append("client_id", this.clientId);
-    authUrl.searchParams.append("redirect_uri", this.redirectUri);
-    authUrl.searchParams.append("response_type", "code");
+    const authUrl = new URL('https://www.strava.com/oauth/authorize');
+    authUrl.searchParams.append('client_id', this.clientId);
+    authUrl.searchParams.append('redirect_uri', this.redirectUri);
+    authUrl.searchParams.append('response_type', 'code');
     authUrl.searchParams.append(
-      "scope",
-      "read,read_all,profile:read_all,activity:read,activity:read_all",
+      'scope',
+      'read,read_all,profile:read_all,activity:read,activity:read_all'
     );
     return authUrl;
   }
 
   public async getAccessToken(): Promise<string> {
     try {
-      const response = await fetch("https://www.strava.com/oauth/token", {
-        method: "POST",
+      const response = await fetch('https://www.strava.com/oauth/token', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           client_id: this.clientId,
           client_secret: this.clientSecret,
-          grant_type: "refresh_token",
-          refresh_token: "YOUR_REFRESH_TOKEN",
+          grant_type: 'refresh_token',
+          refresh_token: 'YOUR_REFRESH_TOKEN',
         }),
       });
 
       if (!response.ok) {
-        throw new Error("Failed to fetch access token");
+        throw new Error('Failed to fetch access token');
       }
 
       const data = (await response.json()) as StravaTokenResponse;
       return data.access_token;
     } catch (error) {
-      console.error("Error fetching Strava access token:", error);
+      console.error('Error fetching Strava access token:', error);
       throw error;
     }
   }
 
   public async getActivities(
     accessToken: string,
-    after: number,
+    after: number
   ): Promise<StravaActivity[]> {
     try {
       const response = await fetch(
@@ -61,16 +62,16 @@ export class Strava {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
-        },
+        }
       );
 
       if (!response.ok) {
-        throw new Error("Failed to fetch activities");
+        throw new Error('Failed to fetch activities');
       }
 
       return await response.json();
     } catch (error) {
-      console.error("Error fetching Strava activities:", error);
+      console.error('Error fetching Strava activities:', error);
       throw error;
     }
   }
@@ -84,12 +85,12 @@ export class Strava {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to fetch athlete");
+        throw new Error('Failed to fetch athlete');
       }
 
       return await response.json();
     } catch (error) {
-      console.error("Error fetching Strava athlete:", error);
+      console.error('Error fetching Strava athlete:', error);
       throw error;
     }
   }
