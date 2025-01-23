@@ -34,8 +34,8 @@ export class Strava {
         body: JSON.stringify({
           client_id: this.clientId,
           client_secret: this.clientSecret,
-          grant_type: 'refresh_token',
-          refresh_token: 'YOUR_REFRESH_TOKEN',
+          code: this.temporaryCode,
+          grant_type: 'authorization_code',
         }),
       });
 

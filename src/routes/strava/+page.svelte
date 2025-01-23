@@ -15,10 +15,23 @@
 
   // Get temporary code after redirect from Strava
   let code: string = page.url.searchParams.get('code') || '';
+  let accessToken: string = '';
 
   if (code !== '') {
     // Add temporary code to Strava class for further use
     stv.temporaryCode = code;
+  }
+
+  async function handleAccessToken() {
+    const req = await stv.getAccessToken();
+    accessToken = req;
+  }
+
+  async function handleRequestActivities() {
+    // Get activities from start of 2025
+    const startTime = new Date('2025-01-01').getTime() / 1000;
+    const activities = await stv.getActivities(accessToken, startTime);
+    console.log('activities', activities);
   }
 </script>
 
@@ -40,6 +53,35 @@
         id="code"
         bind:value={code}
       />
+      <p class="text-muted-foreground text-sm">This is a one time use code.</p>
     </div>
+    {#if stv.temporaryCode}
+      <Button
+        variant="default"
+        class="font-semibold"
+        onclick={handleAccessToken}>Get Access Token</Button
+      >
+      <div class="w-full flex flex-col gap-2">
+        <Label for="access-token">Access Token</Label>
+        <Input
+          placeholder="Access Token"
+          type="text"
+          name="access-token"
+          id="access-token"
+          bind:value={accessToken}
+        />
+        <p class="text-muted-foreground text-sm">
+          This is the access token to be used when requesting data from Strava.
+        </p>
+      </div>
+    {/if}
+
+    {#if accessToken}
+      <Button
+        variant="secondary"
+        class="font-semibold"
+        onclick={handleRequestActivities}>Get Activities</Button
+      >
+    {/if}
   </div>
 </main>
