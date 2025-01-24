@@ -1,3 +1,16 @@
+import type { StravaType, StravaSportType } from "./stravaTypes";
+
+/**
+ * Expose Strava specific types from types.ts
+ */
+export type {
+  StravaAthlete,
+  StravaMap,
+  StravaType,
+  StravaSportType,
+  StravaActivity,
+} from "./stravaTypes";
+
 export interface StravaTokenResponse {
   token_type: string;
   access_token: string;
@@ -6,10 +19,11 @@ export interface StravaTokenResponse {
   refresh_token: string;
 }
 
-export interface StravaActivity {
+export interface Activity {
   id: number;
   name: string;
-  type: string;
+  type: StravaType;
+  sport_type: StravaSportType;
   start_date: string;
   moving_time: number;
   distance: number;
