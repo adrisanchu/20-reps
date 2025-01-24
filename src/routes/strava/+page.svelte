@@ -45,44 +45,50 @@
   <h1 class="text-5xl font-bold text-center mb-12">Strava API</h1>
 
   <div class="flex flex-col gap-4">
-    <Button
-      class="font-semibold text-foreground bg-orange-600"
-      href={stv.getAuthorizeUrl().href}>Connect to Strava</Button
-    >
-
-    <div class="w-full flex flex-col gap-2">
-      <Label for="code">Code</Label>
-      <Input
-        placeholder="Code"
-        type="text"
-        name="code"
-        id="code"
-        bind:value={code}
-      />
-      <p class="text-muted-foreground text-sm">This is a one time use code.</p>
-    </div>
-    {#if stv.temporaryCode}
+    {#if !accessToken}
       <Button
-        variant="default"
-        class="font-semibold"
-        onclick={handleAccessToken}>Get Access Token</Button
+        class="font-semibold text-foreground bg-orange-600"
+        href={stv.getAuthorizeUrl().href}>Connect to Strava</Button
       >
-      <div class="w-full flex flex-col gap-2">
-        <Label for="access-token">Access Token</Label>
-        <Input
-          placeholder="Access Token"
-          type="password"
-          name="access-token"
-          id="access-token"
-          bind:value={accessToken}
-        />
-        <p class="text-muted-foreground text-sm">
-          This is the access token to be used when requesting data from Strava.
-        </p>
-      </div>
-    {/if}
 
-    {#if accessToken}
+      {#if code}
+        <div class="w-full flex flex-col gap-2">
+          <Label for="code">Code</Label>
+          <Input
+            placeholder="Code"
+            type="text"
+            name="code"
+            id="code"
+            bind:value={code}
+            disabled
+          />
+          <p class="text-muted-foreground text-sm">
+            This is a one time use code.
+          </p>
+        </div>
+      {/if}
+      {#if stv.temporaryCode}
+        <Button
+          variant="default"
+          class="font-semibold"
+          onclick={handleAccessToken}>Get Access Token</Button
+        >
+        <div class="w-full flex flex-col gap-2">
+          <Label for="access-token">Access Token</Label>
+          <Input
+            placeholder="Access Token"
+            type="password"
+            name="access-token"
+            id="access-token"
+            bind:value={accessToken}
+          />
+          <p class="text-muted-foreground text-sm">
+            This is the access token to be used when requesting data from
+            Strava.
+          </p>
+        </div>
+      {/if}
+    {:else}
       <Separator />
       <div class="w-full flex flex-col gap-2">
         <h2 class="h2 mb-4">List of available queries</h2>
