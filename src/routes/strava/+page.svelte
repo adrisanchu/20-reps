@@ -3,7 +3,10 @@
   import { Input } from '$lib/components/ui/input/index.js';
   import { Label } from '$lib/components/ui/label/index.js';
   import { Button } from '$lib/components/ui/button/index.js';
+  import { Badge } from '$lib/components/ui/badge/index.js';
+  import { Separator } from '$lib/components/ui/separator/index.js';
   import { page } from '$app/state';
+  import type { StravaActivity } from '$lib/types';
 
   // Init Strava API with client and secret
   const stv: Strava = new Strava(
@@ -16,6 +19,8 @@
   // Get temporary code after redirect from Strava
   let code: string = page.url.searchParams.get('code') || '';
   let accessToken: string = '';
+
+  let activities: StravaActivity[] = [];
 
   if (code !== '') {
     // Add temporary code to Strava class for further use
@@ -30,8 +35,9 @@
   async function handleRequestActivities() {
     // Get activities from start of 2025
     const startTime = new Date('2025-01-01').getTime() / 1000;
-    const activities = await stv.getActivities(accessToken, startTime);
-    console.log('activities', activities);
+    let stravaActivities = await stv.getActivities(accessToken, startTime);
+    console.log('activities', stravaActivities);
+    activities = [...stravaActivities];
   }
 </script>
 
@@ -65,7 +71,7 @@
         <Label for="access-token">Access Token</Label>
         <Input
           placeholder="Access Token"
-          type="text"
+          type="password"
           name="access-token"
           id="access-token"
           bind:value={accessToken}
@@ -77,11 +83,37 @@
     {/if}
 
     {#if accessToken}
-      <Button
-        variant="secondary"
-        class="font-semibold"
-        onclick={handleRequestActivities}>Get Activities</Button
-      >
+      <Separator />
+      <div class="w-full flex flex-col gap-2">
+        <h2 class="h2 mb-4">List of available queries</h2>
+        <!-- Get Activities -->
+        <Button
+          variant="secondary"
+          class="font-semibold"
+          onclick={handleRequestActivities}>Get Activities</Button
+        >
+      </div>
+    {/if}
+
+    {#if activities.length > 0}
+      <ul class="space-y-4">
+        {#each activities as activity (activity.id)}
+          <li class="flex flex-col border-b border-white/20 pb-4">
+            <div class="flex justify-between">
+              <Badge variant="secondary">{activity.type}</Badge>
+              <p class="text-sm text-gray-300">
+                {new Date(activity.start_date).toLocaleDateString()}
+              </p>
+            </div>
+            <div class="flex justify-between">
+              <p class="font-semibold">{activity.name}</p>
+              <p class="text-lg">
+                {Math.floor(activity.elapsed_time / 60)} min
+              </p>
+            </div>
+          </li>
+        {/each}
+      </ul>
     {/if}
   </div>
 </main>
