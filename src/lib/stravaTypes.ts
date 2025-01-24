@@ -10,18 +10,18 @@ export interface StravaMap {
 }
 
 export enum StravaType {
-  AlpineSki = "AlpineSki",
-  GravelRide = "GravelRide",
-  Ride = "Ride",
-  WeightTraining = "WeightTraining",
-  Workout = "Workout", // sometimes is WeightTraining?
+  AlpineSki = 'AlpineSki',
+  GravelRide = 'GravelRide',
+  Ride = 'Ride',
+  WeightTraining = 'WeightTraining',
+  Workout = 'Workout', // sometimes is WeightTraining?
 }
 
 export enum StravaSportType {
-  AlpineSki = "AlpineSki",
-  GravelRide = "GravelRide",
-  Ride = "Ride",
-  WeightTraining = "WeightTraining",
+  AlpineSki = 'AlpineSki',
+  GravelRide = 'GravelRide',
+  Ride = 'Ride',
+  WeightTraining = 'WeightTraining',
 }
 
 export interface StravaActivity {

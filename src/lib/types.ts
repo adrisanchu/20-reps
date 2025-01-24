@@ -1,4 +1,4 @@
-import type { StravaType, StravaSportType } from "./stravaTypes";
+import type { StravaType, StravaSportType } from './stravaTypes';
 
 /**
  * Expose Strava specific types from types.ts
@@ -9,7 +9,7 @@ export type {
   StravaType,
   StravaSportType,
   StravaActivity,
-} from "./stravaTypes";
+} from './stravaTypes';
 
 export interface StravaTokenResponse {
   token_type: string;
