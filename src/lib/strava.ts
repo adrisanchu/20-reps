@@ -9,7 +9,7 @@ export class Strava {
   constructor(clientId: string, clientSecret: string) {
     this.clientId = clientId;
     this.clientSecret = clientSecret;
-    this.redirectUri = 'http://localhost:5173/strava'; // Update depending on devel or prod
+    this.redirectUri = import.meta.env.VITE_REDIRECT_URI; // Update depending on devel or prod
   }
 
   public getAuthorizeUrl(): URL {
