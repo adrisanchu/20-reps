@@ -15,6 +15,9 @@ export enum StravaType {
   Ride = 'Ride',
   WeightTraining = 'WeightTraining',
   Workout = 'Workout', // sometimes is WeightTraining?
+  Kitesurf = 'Kitesurf',
+  Yoga = 'Yoga',
+  Swim = 'Swim',
 }
 
 export enum StravaSportType {
@@ -22,6 +25,9 @@ export enum StravaSportType {
   GravelRide = 'GravelRide',
   Ride = 'Ride',
   WeightTraining = 'WeightTraining',
+  Kitesurf = 'Kitesurf',
+  Yoga = 'Yoga',
+  Swim = 'Swim',
 }
 
 export interface StravaActivity {
