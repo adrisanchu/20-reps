@@ -1,6 +1,6 @@
 <script lang="ts">
   import * as m from '$lib/paraglide/messages.js';
-  import LanguageSwitcher from '$lib/components/ui/LanguageSwitcher.svelte';
+  import LanguageSwitcher from '$lib/components/LanguageSwitcher.svelte';
   // Dummy dataset
   const challengeData = {
     startDate: '2024-01-01',
