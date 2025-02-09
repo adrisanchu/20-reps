@@ -1,3 +1,11 @@
-import * as runtime from '$lib/paraglide/runtime';
-import { createI18n } from '@inlang/paraglide-sveltekit';
-export const i18n = createI18n(runtime);
+import * as runtime from "$lib/paraglide/runtime";
+import { createI18n } from "@inlang/paraglide-sveltekit";
+export const i18n = createI18n(runtime, {
+  pathnames: {
+    "/settings": {
+      en: "/settings",
+      es: "/ajustes",
+      fr: "/parametres",
+    },
+  },
+});
