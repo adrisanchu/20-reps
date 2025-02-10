@@ -24,6 +24,14 @@
    * https://developers.cloudflare.com/workers/runtime-apis/bindings/
    */
 
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "20-reps-db",
+      "database_id": "0741794f-9eb7-4d9d-a4fe-39f6baafb2c7"
+    }
+  ],
+
   /**
    * Environment Variables
    * https://developers.cloudflare.com/workers/wrangler/configuration/#environment-variables
