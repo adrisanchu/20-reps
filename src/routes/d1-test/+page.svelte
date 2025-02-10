@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { Button } from '$lib/components/ui/button/index.js';
+
   let activities = [
     {
       id: 13238591234,
@@ -13,6 +15,18 @@
       },
     },
   ];
+
+  async function getActivities() {
+    try {
+      const res = await fetch('/api/get-activities');
+      console.log('get-activities: ', res);
+      res.json().then((data) => {
+        console.log('data: ', data);
+      })
+    } catch (error) {
+      console.error('Error getting activities:', error);
+    }
+  }
 
   async function saveActivities() {
     try {
@@ -31,4 +45,5 @@
   }
 </script>
 
-<button on:click={saveActivities}>Save Activities</button>
+<Button class="font-semibold text-foreground bg-sky-500" onclick={saveActivities}>Save Activities</Button>
+<Button class="font-semibold text-foreground bg-orange-600" onclick={getActivities}>Get Activities</Button>
