@@ -22,12 +22,12 @@ export interface StravaTokenResponse {
 export interface Activity {
   id: number;
   name: string;
-  type: StravaType;
   sport_type: StravaSportType;
   start_date: string;
-  moving_time: number;
   distance: number;
-  total_elevation_gain: number;
+  moving_time: number;
+  elapsed_time: number;
+  extra_data?: Record<string, any>;
 }
 
 export interface Workout {

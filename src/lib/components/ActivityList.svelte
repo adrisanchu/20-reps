@@ -1,8 +1,8 @@
 <script lang="ts">
   import { Badge } from '$lib/components/ui/badge/index.js';
-  import type { StravaActivity, StravaSportType } from '$lib/types';
+  import type { Activity, StravaActivity, StravaSportType } from '$lib/types';
 
-  export let activities: StravaActivity[] = [];
+  export let activities: Activity[] | StravaActivity[] = [];
 
   let activityColors: { [key in keyof typeof StravaSportType]: string } = {
     Ride: 'bg-yellow-400',

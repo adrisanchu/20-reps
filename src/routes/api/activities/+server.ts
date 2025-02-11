@@ -1,16 +1,7 @@
 import type { RequestHandler } from './$types';
 import type { D1Database } from '@cloudflare/workers-types';
+import type { Activity } from '$lib/types';
 
-interface Activity {
-  id: number;
-  name: string;
-  start_date: string;
-  sport_type: string;
-  distance: number;
-  moving_time: number;
-  elapsed_time: number;
-  extra_data: Record<string, any>;
-}
 
 export const GET: RequestHandler = async ({ platform }) => {
   console.log('api/activities GET');
@@ -37,7 +28,7 @@ export const POST: RequestHandler = async ({ request, platform }) => {
     }
 
     const db: D1Database = platform.env.DB;
-    const stmt = await db.prepare(
+    const stmt = db.prepare(
       `INSERT INTO strava_activities (id, name, start_date, sport_type, distance, moving_time, elapsed_time, extra_data)
        VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)`
     );
