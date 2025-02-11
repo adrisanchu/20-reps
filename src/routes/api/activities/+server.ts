@@ -53,3 +53,64 @@ export const POST: RequestHandler = async ({ request, platform }) => {
     return new Response('Internal Server Error', { status: 500 });
   }
 };
+
+export const DELETE: RequestHandler = async ({ url, platform }) => {
+  if (!platform?.env?.DB) {
+    return new Response('Database not available', { status: 500 });
+  }
+
+  try {
+    const id = url.searchParams.get('id');
+    if (!id) {
+      return new Response('Missing activity ID', { status: 400 });
+    }
+
+    const db: D1Database = platform.env.DB;
+    const stmt = await db
+      .prepare('DELETE FROM strava_activities WHERE id = ?1')
+      .bind(id);
+    await stmt.run();
+
+    return new Response(`Activity ${id} deleted successfully`, { status: 200 });
+  } catch (error) {
+    console.error('Error deleting activity:', error);
+    return new Response('Internal Server Error', { status: 500 });
+  }
+};
+
+export const PUT: RequestHandler = async ({ request, platform }) => {
+  if (!platform?.env?.DB) {
+    return new Response('Database not available', { status: 500 });
+  }
+
+  try {
+    const body = (await request.json()) as Activity;
+    if (!body.id) {
+      return new Response('Missing activity ID', { status: 400 });
+    }
+
+    const db: D1Database = platform.env.DB;
+    const stmt = await db
+      .prepare(
+        `UPDATE strava_activities 
+       SET name = ?2, start_date = ?3, sport_type = ?4, distance = ?5, extra_data = ?6
+       WHERE id = ?1`
+      )
+      .bind(
+        body.id,
+        body.name,
+        body.start_date,
+        body.sport_type,
+        body.distance,
+        JSON.stringify(body.extra_data)
+      );
+
+    await stmt.run();
+    return new Response(`Activity ${body.id} updated successfully`, {
+      status: 200,
+    });
+  } catch (error) {
+    console.error('Error updating activity:', error);
+    return new Response('Internal Server Error', { status: 500 });
+  }
+};
