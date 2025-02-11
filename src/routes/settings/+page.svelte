@@ -59,11 +59,11 @@
 
 <div class="min-h-screen">
   <main class="container mx-auto px-4 py-10">
-    <h1 class="text-5xl font-bold text-center mb-12">{m.settings_title()}</h1>
+    <h1 class="mb-12 text-center text-5xl font-bold">{m.settings_title()}</h1>
     <h2 class="text-3xl font-bold">{m.settings_sports_title()}</h2>
     <ul class="mt-4 space-y-4">
       {#each activities as activity (activity.id)}
-        <li class="flex flex-col b-4">
+        <li class="b-4 flex flex-col">
           <div class="flex justify-between">
             <Badge
               variant="secondary"

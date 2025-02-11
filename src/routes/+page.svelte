@@ -55,48 +55,48 @@
 </script>
 
 <div class="min-h-screen">
-  <div class="fixed top-4 right-4 z-10">
+  <div class="fixed right-4 top-4 z-10">
     <LanguageSwitcher />
   </div>
   <main class="container mx-auto px-4 py-10">
-    <h1 class="text-5xl font-bold text-center mb-12">{m.title()}</h1>
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-4xl mx-auto">
+    <h1 class="mb-12 text-center text-5xl font-bold">{m.title()}</h1>
+    <div class="mx-auto grid max-w-4xl grid-cols-1 gap-8 sm:grid-cols-3">
       <!-- Current Streak -->
-      <div class="bg-white/10 backdrop-blur-lg rounded-xl p-4 text-center">
-        <h2 class="text-2xl font-semibold mb-2">{m.current_streak_title()}</h2>
+      <div class="rounded-xl bg-white/10 p-4 text-center backdrop-blur-lg">
+        <h2 class="mb-2 text-2xl font-semibold">{m.current_streak_title()}</h2>
         <p class="text-6xl font-bold">
           {stats.currentStreak}
         </p>
-        <p class="text-lg mt-2">{m.current_streak_unit()}</p>
+        <p class="mt-2 text-lg">{m.current_streak_unit()}</p>
       </div>
 
       <!-- Total Workouts -->
-      <div class="bg-white/10 backdrop-blur-lg rounded-xl p-4 text-center">
-        <h2 class="text-2xl font-semibold mb-2">{m.total_workouts_title()}</h2>
+      <div class="rounded-xl bg-white/10 p-4 text-center backdrop-blur-lg">
+        <h2 class="mb-2 text-2xl font-semibold">{m.total_workouts_title()}</h2>
         <p class="text-6xl font-bold">
           {stats.totalWorkouts}
         </p>
-        <p class="text-lg mt-2">{m.total_workouts_unit()}</p>
+        <p class="mt-2 text-lg">{m.total_workouts_unit()}</p>
       </div>
 
       <!-- Remaining Days -->
-      <div class="bg-white/10 backdrop-blur-lg rounded-xl p-4 text-center">
-        <h2 class="text-2xl font-semibold mb-2">{m.days_remaining_title()}</h2>
+      <div class="rounded-xl bg-white/10 p-4 text-center backdrop-blur-lg">
+        <h2 class="mb-2 text-2xl font-semibold">{m.days_remaining_title()}</h2>
         <p class="text-6xl font-bold">
           {stats.remainingDays}
         </p>
-        <p class="text-lg mt-2">{m.days_remaining_unit()}</p>
+        <p class="mt-2 text-lg">{m.days_remaining_unit()}</p>
       </div>
     </div>
 
     <!-- Recent Activity -->
-    <div class="mt-16 max-w-4xl mx-auto">
-      <h2 class="text-3xl font-bold mb-6">Recent Activity</h2>
-      <div class="bg-white/10 backdrop-blur-lg rounded-xl p-6">
+    <div class="mx-auto mt-16 max-w-4xl">
+      <h2 class="mb-6 text-3xl font-bold">Recent Activity</h2>
+      <div class="rounded-xl bg-white/10 p-6 backdrop-blur-lg">
         <ul class="space-y-4">
           {#each challengeData.workouts.slice(0, 5) as workout}
             <li
-              class="flex justify-between items-center border-b border-white/20 pb-4"
+              class="flex items-center justify-between border-b border-white/20 pb-4"
             >
               <div>
                 <p class="font-semibold">{workout.type}</p>

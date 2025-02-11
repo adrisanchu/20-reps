@@ -2,7 +2,6 @@ import type { RequestHandler } from './$types';
 import type { D1Database } from '@cloudflare/workers-types';
 import type { Activity } from '$lib/types';
 
-
 export const GET: RequestHandler = async ({ platform }) => {
   console.log('api/activities GET');
   if (!platform?.env?.DB) {

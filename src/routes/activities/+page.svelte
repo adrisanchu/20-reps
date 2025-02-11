@@ -27,10 +27,7 @@
       distance: 0,
       elapsed_time: 0,
       moving_time: 0,
-      extra_data: {
-        moving_time: 402,
-        elapsed_time: 402,
-      },
+      extra_data: { moving_time: 402, elapsed_time: 402 },
     },
   ];
 
@@ -57,9 +54,7 @@
     try {
       const res = await fetch('/api/activities', {
         method: 'GET',
-        headers: {
-          'content-type': 'application/json',
-        },
+        headers: { 'content-type': 'application/json' },
       });
 
       const { results } = (await res.json()) as { results: Activity[] };
@@ -70,21 +65,19 @@
   }
 </script>
 
-<main class="flex flex-col justify-center max-w-xl mx-auto px-4 py-10">
+<main class="mx-auto flex max-w-xl flex-col justify-center px-4 py-10">
   <div class="mb-4 space-x-2">
     <Button
-  class="font-semibold text-foreground bg-sky-500"
-  onclick={saveActivities}>Save Activities</Button
->
-<Button
-  class="font-semibold text-foreground bg-orange-600"
-  onclick={getActivities}>Get Activities</Button
->
+      class="bg-sky-500 font-semibold text-foreground"
+      onclick={saveActivities}>Save Activities</Button
+    >
+    <Button
+      class="bg-orange-600 font-semibold text-foreground"
+      onclick={getActivities}>Get Activities</Button
+    >
   </div>
-  
 
-{#if activitiesFromDB.length > 0}
-  <ActivityList activities={activitiesFromDB}></ActivityList>
-{/if}
+  {#if activitiesFromDB.length > 0}
+    <ActivityList activities={activitiesFromDB}></ActivityList>
+  {/if}
 </main>
-
