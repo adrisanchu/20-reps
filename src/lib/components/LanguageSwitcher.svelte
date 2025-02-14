@@ -28,7 +28,7 @@
 </script>
 
 <select
-  class="text-xl bg-background border-input rounded-md py-2 px-2 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+  class="rounded-md border-input bg-background px-2 py-2 text-xl focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
   on:change={(e) =>
     switchToLanguage(
       (e.target as HTMLSelectElement)?.value as AvailableLanguageTag

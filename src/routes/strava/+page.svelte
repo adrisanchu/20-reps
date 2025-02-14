@@ -6,6 +6,7 @@
   import { Button } from '$lib/components/ui/button/index.js';
   import { Separator } from '$lib/components/ui/separator/index.js';
   import type { StravaActivity } from '$lib/types';
+  import { saveActivities } from '$lib/api';
   import ActivityList from '$lib/components/ActivityList.svelte';
 
   // Init Strava API with client and secret
@@ -41,18 +42,18 @@
   }
 </script>
 
-<main class="flex flex-col justify-center max-w-xl mx-auto px-4 py-10">
-  <h1 class="text-5xl font-bold text-center mb-12">Strava API</h1>
+<main class="mx-auto flex max-w-xl flex-col justify-center px-4 py-10">
+  <h1 class="mb-12 text-center text-5xl font-bold">Strava API</h1>
 
   <div class="flex flex-col gap-4">
     {#if !accessToken}
       <Button
-        class="font-semibold text-foreground bg-orange-600"
+        class="bg-orange-600 font-semibold text-foreground"
         href={stv.getAuthorizeUrl().href}>Connect to Strava</Button
       >
 
       {#if code}
-        <div class="w-full flex flex-col gap-2">
+        <div class="flex w-full flex-col gap-2">
           <Label for="code">Code</Label>
           <Input
             placeholder="Code"
@@ -62,7 +63,7 @@
             bind:value={code}
             disabled
           />
-          <p class="text-muted-foreground text-sm">
+          <p class="text-sm text-muted-foreground">
             This is a one time use code.
           </p>
         </div>
@@ -73,7 +74,7 @@
           class="font-semibold"
           onclick={handleAccessToken}>Get Access Token</Button
         >
-        <div class="w-full flex flex-col gap-2">
+        <div class="flex w-full flex-col gap-2">
           <Label for="access-token">Access Token</Label>
           <Input
             placeholder="Access Token"
@@ -82,7 +83,7 @@
             id="access-token"
             bind:value={accessToken}
           />
-          <p class="text-muted-foreground text-sm">
+          <p class="text-sm text-muted-foreground">
             This is the access token to be used when requesting data from
             Strava.
           </p>
@@ -90,7 +91,7 @@
       {/if}
     {:else}
       <Separator />
-      <div class="w-full flex flex-col gap-2">
+      <div class="flex w-full flex-col gap-2">
         <h2 class="h2 mb-4">List of available queries</h2>
         <!-- Get Activities -->
         <Button
@@ -102,6 +103,12 @@
     {/if}
 
     {#if activities.length > 0}
+      <div class="mb-4 space-x-2">
+        <Button
+          class="bg-sky-500 font-semibold text-foreground"
+          onclick={() => saveActivities(activities)}>Save Activities</Button
+        >
+      </div>
       <ActivityList {activities}></ActivityList>
     {/if}
   </div>

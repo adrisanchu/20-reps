@@ -20,15 +20,14 @@ export enum StravaType {
   Swim = 'Swim',
 }
 
-export enum StravaSportType {
-  AlpineSki = 'AlpineSki',
-  GravelRide = 'GravelRide',
-  Ride = 'Ride',
-  WeightTraining = 'WeightTraining',
-  Kitesurf = 'Kitesurf',
-  Yoga = 'Yoga',
-  Swim = 'Swim',
-}
+export type StravaSportType =
+  | 'AlpineSki'
+  | 'GravelRide'
+  | 'Ride'
+  | 'WeightTraining'
+  | 'Kitesurf'
+  | 'Yoga'
+  | 'Swim';
 
 export interface StravaActivity {
   resource_state: number;
@@ -42,7 +41,7 @@ export interface StravaActivity {
   sport_type: StravaSportType;
   workout_type?: number | null;
   id: number;
-  start_date: Date;
+  start_date: string; // Date;
   start_date_local: Date;
   timezone: string;
   utc_offset: number;

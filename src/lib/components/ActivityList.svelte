@@ -1,10 +1,10 @@
 <script lang="ts">
   import { Badge } from '$lib/components/ui/badge/index.js';
-  import type { StravaActivity, StravaSportType } from '$lib/types';
+  import type { Activity, StravaActivity, StravaSportType } from '$lib/types';
 
-  export let activities: StravaActivity[] = [];
+  export let activities: Activity[] | StravaActivity[] = [];
 
-  let activityColors: { [key in keyof typeof StravaSportType]: string } = {
+  let activityColors: { [key in StravaSportType]: string } = {
     Ride: 'bg-yellow-400',
     GravelRide: 'bg-yellow-500',
     WeightTraining: 'bg-orange-500',
@@ -17,7 +17,9 @@
 
 <ul class="space-y-4">
   {#each activities as activity (activity.id)}
-    <li class="flex flex-col border-b border-white/20 pb-4">
+    <li
+      class="flex flex-col border-b border-white/20 pb-4 last:border-b-0 last:pb-0"
+    >
       <div class="flex justify-between">
         <Badge variant="secondary" class={activityColors[activity.sport_type]}
           >{activity.sport_type}</Badge
