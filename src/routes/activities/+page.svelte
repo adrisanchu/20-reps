@@ -4,10 +4,11 @@
   import { Label } from '$lib/components/ui/label/index.js';
   import ActivityList from '$lib/components/ActivityList.svelte';
   import type { Activity } from '$lib/types';
+  import { saveActivities } from '$lib/api';
 
   let myId: number;
 
-  let activities = [
+  let activities: Activity[] = [
     {
       id: 13238591234,
       name: 'Primera del año',
@@ -35,23 +36,6 @@
   ];
 
   let activitiesFromDB: Activity[] = [];
-
-  async function saveActivities() {
-    try {
-      const res = await fetch('/api/activities', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ activities }),
-      });
-
-      if (!res.ok) throw new Error(await res.text());
-      alert('Activities saved successfully!');
-      // goto('/'); // Redirect or refresh page
-    } catch (error) {
-      console.error('Error saving activities:', error);
-      alert('Failed to save activities.');
-    }
-  }
 
   async function getActivities() {
     try {
@@ -90,7 +74,7 @@
   <div class="mb-4 space-x-2">
     <Button
       class="bg-sky-500 font-semibold text-foreground"
-      onclick={saveActivities}>Save Activities</Button
+      onclick={() => saveActivities(activities)}>Save Activities</Button
     >
     <Button
       class="bg-orange-600 font-semibold text-foreground"

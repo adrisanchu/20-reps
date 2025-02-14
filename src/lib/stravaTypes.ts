@@ -20,15 +20,14 @@ export enum StravaType {
   Swim = 'Swim',
 }
 
-export enum StravaSportType {
-  AlpineSki = 'AlpineSki',
-  GravelRide = 'GravelRide',
-  Ride = 'Ride',
-  WeightTraining = 'WeightTraining',
-  Kitesurf = 'Kitesurf',
-  Yoga = 'Yoga',
-  Swim = 'Swim',
-}
+export type StravaSportType =
+  | 'AlpineSki'
+  | 'GravelRide'
+  | 'Ride'
+  | 'WeightTraining'
+  | 'Kitesurf'
+  | 'Yoga'
+  | 'Swim';
 
 export interface StravaActivity {
   resource_state: number;
