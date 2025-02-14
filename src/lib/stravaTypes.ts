@@ -41,7 +41,7 @@ export interface StravaActivity {
   sport_type: StravaSportType;
   workout_type?: number | null;
   id: number;
-  start_date: Date;
+  start_date: string; // Date;
   start_date_local: Date;
   timezone: string;
   utc_offset: number;

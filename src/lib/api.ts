@@ -1,8 +1,50 @@
 import type { Activity, StravaActivity } from '$lib/types';
 
+export function adaptActivities(rawActivities: StravaActivity[]): Activity[] {
+  return rawActivities.map(
+    ({
+      id,
+      name,
+      start_date,
+      sport_type,
+      distance,
+      moving_time,
+      elapsed_time,
+      ...extra
+    }) => ({
+      id,
+      name,
+      start_date,
+      sport_type,
+      distance,
+      moving_time,
+      elapsed_time,
+      extra_data: extra, // Store all remaining properties inside extra_data
+    })
+  );
+}
+
 export async function saveActivities(
-  activities: Activity[] | StravaActivity[]
+  rawActivities: Activity[] | StravaActivity[]
 ) {
+  if (rawActivities.length === 0) {
+    console.error('No activities to save');
+    return;
+  }
+
+  let activities: Activity[];
+
+  // Check if rawActivities is of type StravaActivity[]
+  const isStravaActivity = (activity: any): activity is StravaActivity =>
+    'resource_state' in activity && 'athlete' in activity;
+
+  if (isStravaActivity(rawActivities[0])) {
+    // Adapt StravaActivity[] to Activity[]
+    activities = adaptActivities(rawActivities as StravaActivity[]);
+  } else {
+    activities = rawActivities;
+  }
+
   try {
     const res = await fetch('/api/activities', {
       method: 'POST',
