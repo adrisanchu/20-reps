@@ -55,13 +55,15 @@ export const POST: RequestHandler = async ({ request, platform }) => {
 };
 
 export const DELETE: RequestHandler = async ({ url, platform }) => {
+  console.log('api/activities DELETE');
   if (!platform?.env?.DB) {
     return new Response('Database not available', { status: 500 });
   }
 
   try {
     const id = url.searchParams.get('id');
-    if (!id) {
+    console.log('Deleting activity with ID:', id);
+    if (!id || id === 'undefined') {
       return new Response('Missing activity ID', { status: 400 });
     }
 
@@ -69,7 +71,12 @@ export const DELETE: RequestHandler = async ({ url, platform }) => {
     const stmt = await db
       .prepare('DELETE FROM strava_activities WHERE id = ?1')
       .bind(id);
-    await stmt.run();
+    const result = await stmt.run();
+    // Check if any changes happenned after the query.
+    // If not, delete was not successfull, probably because the ID was not found
+    if (result.meta.changes === 0) {
+      return new Response(`Activity ${id} not found`, { status: 404 });
+    }
 
     return new Response(`Activity ${id} deleted successfully`, { status: 200 });
   } catch (error) {
@@ -79,6 +86,7 @@ export const DELETE: RequestHandler = async ({ url, platform }) => {
 };
 
 export const PUT: RequestHandler = async ({ request, platform }) => {
+  console.log('api/activities PUT');
   if (!platform?.env?.DB) {
     return new Response('Database not available', { status: 500 });
   }

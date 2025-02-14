@@ -1,8 +1,11 @@
 <script lang="ts">
+  import { Input } from '$lib/components/ui/input/index.js';
   import { Button } from '$lib/components/ui/button/index.js';
+  import { Label } from '$lib/components/ui/label/index.js';
   import ActivityList from '$lib/components/ActivityList.svelte';
-
   import type { Activity } from '$lib/types';
+
+  let myId: number;
 
   let activities = [
     {
@@ -63,6 +66,24 @@
       console.error('Error getting activities:', error);
     }
   }
+
+  async function deleteActivity(id: number) {
+    try {
+      const res = await fetch(`/api/activities?id=${id}`, {
+        method: 'DELETE',
+      });
+
+      if (!res.ok) throw new Error(await res.text());
+
+      // Remove the deleted activity from the list
+      activities = activities.filter((activity) => activity.id !== id);
+
+      alert(`Activity ${id} deleted successfully!`);
+    } catch (error) {
+      console.error('Error deleting activity:', error);
+      alert(`Failed to delete activity ${id}.`);
+    }
+  }
 </script>
 
 <main class="mx-auto flex max-w-xl flex-col justify-center px-4 py-10">
@@ -79,5 +100,22 @@
 
   {#if activitiesFromDB.length > 0}
     <ActivityList activities={activitiesFromDB}></ActivityList>
+    <div class="mt-2">
+      <Label for="id" class="mb-2">Delete with an ID</Label>
+      <div class="flex">
+        <Input
+          class="mr-2"
+          type="number"
+          name="id"
+          id="id"
+          bind:value={myId}
+          placeholder="ID Number"
+        />
+        <Button
+          class="bg-orange-600 font-semibold text-foreground"
+          onclick={() => deleteActivity(myId)}>Delete Activity</Button
+        >
+      </div>
+    </div>
   {/if}
 </main>
