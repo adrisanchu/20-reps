@@ -1,6 +1,9 @@
 <script lang="ts">
   import * as m from '$lib/paraglide/messages.js';
   import LanguageSwitcher from '$lib/components/LanguageSwitcher.svelte';
+  import { getActivities } from '$lib/api';
+  import ActivityList from '$lib/components/ActivityList.svelte';
+
   // Dummy dataset
   const challengeData = {
     startDate: '2024-01-01',
@@ -92,23 +95,11 @@
     <!-- Recent Activity -->
     <div class="mx-auto mt-16 max-w-4xl">
       <h2 class="mb-6 text-3xl font-bold">Recent Activity</h2>
-      <div class="rounded-xl bg-white/10 p-6 backdrop-blur-lg">
-        <ul class="space-y-4">
-          {#each challengeData.workouts.slice(0, 5) as workout}
-            <li
-              class="flex items-center justify-between border-b border-white/20 pb-4"
-            >
-              <div>
-                <p class="font-semibold">{workout.type}</p>
-                <p class="text-sm text-gray-300">
-                  {new Date(workout.date).toLocaleDateString()}
-                </p>
-              </div>
-              <p class="text-lg">{workout.duration} min</p>
-            </li>
-          {/each}
-        </ul>
-      </div>
+      {#await getActivities() then activities}
+        <div class="rounded-xl bg-white/10 p-6 backdrop-blur-lg">
+          <ActivityList {activities} />
+        </div>
+      {/await}
     </div>
   </main>
 </div>

@@ -17,7 +17,9 @@
 
 <ul class="space-y-4">
   {#each activities as activity (activity.id)}
-    <li class="flex flex-col border-b border-white/20 pb-4">
+    <li
+      class="flex flex-col border-b border-white/20 pb-4 last:border-b-0 last:pb-0"
+    >
       <div class="flex justify-between">
         <Badge variant="secondary" class={activityColors[activity.sport_type]}
           >{activity.sport_type}</Badge

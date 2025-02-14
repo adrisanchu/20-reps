@@ -59,3 +59,18 @@ export async function saveActivities(
     alert('Failed to save activities.');
   }
 }
+
+export async function getActivities(): Promise<Activity[]> {
+  try {
+    const res = await fetch('/api/activities', {
+      method: 'GET',
+      headers: { 'content-type': 'application/json' },
+    });
+
+    const { results } = (await res.json()) as { results: Activity[] };
+    return results;
+  } catch (error) {
+    console.error('Error getting activities:', error);
+    return [];
+  }
+}
