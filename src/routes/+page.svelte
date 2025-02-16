@@ -166,7 +166,7 @@
 
       <!-- Recent Activity -->
       <div class="mx-auto mt-16 max-w-4xl">
-        <h2 class="mb-6 text-3xl font-bold">Recent Activity</h2>
+        <h2 class="mb-6 text-3xl font-bold">{m.recent_activity_title()}</h2>
 
         <div class="rounded-xl bg-white/10 p-6 backdrop-blur-lg">
           <ActivityList {activities} />

@@ -8,6 +8,7 @@
   "total_workouts_unit": "completés",
   "days_remaining_title": "Nombre de Jours",
   "days_remaining_unit": "restants",
+  "recent_activity_title": "Entraînements recents",
   "settings_title": "Paramètres",
   "settings_sports_title": "Sports"
 }
