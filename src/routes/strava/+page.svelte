@@ -21,6 +21,10 @@
   let code: string = page.url.searchParams.get('code') || '';
   let accessToken: string = '';
 
+  // Dates to filter getActivities query
+  let dateFrom: string = '';
+  let dateTo: string = '';
+
   let activities: StravaActivity[] = [];
 
   if (code !== '') {
@@ -33,10 +37,15 @@
     accessToken = req;
   }
 
-  async function handleRequestActivities() {
-    // Get activities from start of 2025
-    const startTime = new Date('2025-01-01').getTime() / 1000;
-    let stravaActivities = await stv.getActivities(accessToken, startTime);
+  async function handleRequestActivities(from?: string, to?: string) {
+    // Extract params to query based on dates
+    const startTime = from ? new Date(from).getTime() / 1000 : undefined;
+    const endTime = to ? new Date(to).getTime() / 1000 : undefined;
+
+    let stravaActivities = await stv.getActivities(accessToken, {
+      after: startTime,
+      before: endTime,
+    });
     console.log('activities', stravaActivities);
     activities = [...stravaActivities];
   }
@@ -93,17 +102,48 @@
       <Separator />
       <div class="flex w-full flex-col gap-2">
         <h2 class="h2 mb-4">List of available queries</h2>
+
         <!-- Get Activities -->
+        <h3 class="h3 mb-2">Get Activities</h3>
+        <div class="flex justify-evenly space-x-4">
+          <div class="w-full space-y-2">
+            <Label for="date-from">Date from:</Label>
+            <Input
+              class="bg-white/10 text-white dark:[color-scheme:dark]"
+              placeholder="Date from"
+              type="date"
+              name="date-from"
+              id="date-from"
+              bind:value={dateFrom}
+            />
+          </div>
+          <div class="w-full space-y-2">
+            <Label for="date-to">Date to:</Label>
+            <Input
+              class="bg-white/10 text-white dark:[color-scheme:dark]"
+              placeholder="Date to"
+              type="date"
+              name="date-to"
+              id="date-to"
+              bind:value={dateTo}
+            />
+          </div>
+        </div>
         <Button
           variant="secondary"
           class="font-semibold"
-          onclick={handleRequestActivities}>Get Activities</Button
+          onclick={() => handleRequestActivities(dateFrom, dateTo)}
+          >Get Activities</Button
         >
       </div>
     {/if}
 
     {#if activities.length > 0}
-      <div class="mb-4 space-x-2">
+      <Separator />
+      <div class="mb-4 flex items-end justify-between space-x-2">
+        <p class="text-muted-foreground">
+          Showing {activities.length} activities.
+        </p>
         <Button
           class="bg-sky-500 font-semibold text-foreground"
           onclick={() => saveActivities(activities)}>Save Activities</Button

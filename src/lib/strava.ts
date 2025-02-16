@@ -53,11 +53,28 @@ export class Strava {
 
   public async getActivities(
     accessToken: string,
-    after: number
+    options?: {
+      before?: number;
+      after?: number;
+      per_page?: number;
+    }
   ): Promise<StravaActivity[]> {
+    if (!options?.per_page) {
+      options!.per_page = 100;
+    }
+
+    let queryParams: string = `?per_page=${options!.per_page}`;
+
+    if (options?.before) {
+      queryParams = queryParams + `&before=${options!.before}`;
+    }
+    if (options?.after) {
+      queryParams = queryParams + `&after=${options!.after}`;
+    }
+
     try {
       const response = await fetch(
-        `https://www.strava.com/api/v3/athlete/activities?after=${after}&per_page=100`,
+        `https://www.strava.com/api/v3/athlete/activities` + queryParams,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
