@@ -32,11 +32,21 @@
     stv.temporaryCode = code;
   }
 
-  async function handleAccessToken() {
+  /**
+   Handles the accessToken request to Strava,
+   * and sets the accessToken on the Strava instance.
+   */
+  async function handleAccessToken(): Promise<void> {
     const req = await stv.getAccessToken();
     accessToken = req;
   }
 
+  /**
+   * Handles the request for activities from Strava,
+   * based on the provided date range.
+   * @param from the date from
+   * @param to the date to
+   */
   async function handleRequestActivities(from?: string, to?: string) {
     // Extract params to query based on dates
     const startTime = from ? new Date(from).getTime() / 1000 : undefined;
@@ -105,7 +115,7 @@
 
         <!-- Get Activities -->
         <h3 class="h3 mb-2">Get Activities</h3>
-        <div class="flex justify-evenly space-x-4">
+        <div class="mb-2 flex justify-evenly space-x-4">
           <div class="w-full space-y-2">
             <Label for="date-from">Date from:</Label>
             <Input
