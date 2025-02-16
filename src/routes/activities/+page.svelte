@@ -4,7 +4,7 @@
   import { Label } from '$lib/components/ui/label/index.js';
   import ActivityList from '$lib/components/ActivityList.svelte';
   import type { Activity } from '$lib/types';
-  import { saveActivities } from '$lib/api';
+  import { api } from '$lib/api';
 
   let myId: number;
 
@@ -74,7 +74,7 @@
   <div class="mb-4 space-x-2">
     <Button
       class="bg-sky-500 font-semibold text-foreground"
-      onclick={() => saveActivities(activities)}>Save Activities</Button
+      onclick={() => api.saveActivities(activities)}>Save Activities</Button
     >
     <Button
       class="bg-orange-600 font-semibold text-foreground"

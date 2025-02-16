@@ -6,7 +6,7 @@
   let activities: {
     id: number;
     name: string;
-    sport_type: keyof typeof StravaSportType;
+    sport_type: StravaSportType;
   }[] = [
     {
       id: 1,
@@ -46,7 +46,7 @@
     },
   ];
 
-  let activityColors: { [key in keyof typeof StravaSportType]: string } = {
+  let activityColors: { [key in StravaSportType]: string } = {
     Ride: 'bg-yellow-400',
     GravelRide: 'bg-yellow-500',
     WeightTraining: 'bg-orange-500',

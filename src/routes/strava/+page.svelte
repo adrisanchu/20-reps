@@ -6,7 +6,7 @@
   import { Button } from '$lib/components/ui/button/index.js';
   import { Separator } from '$lib/components/ui/separator/index.js';
   import type { StravaActivity } from '$lib/types';
-  import { saveActivities } from '$lib/api';
+  import { api } from '$lib/api';
   import ActivityList from '$lib/components/ActivityList.svelte';
 
   // Init Strava API with client and secret
@@ -156,7 +156,7 @@
         </p>
         <Button
           class="bg-sky-500 font-semibold text-foreground"
-          onclick={() => saveActivities(activities)}>Save Activities</Button
+          onclick={() => api.saveActivities(activities)}>Save Activities</Button
         >
       </div>
       <ActivityList {activities}></ActivityList>
