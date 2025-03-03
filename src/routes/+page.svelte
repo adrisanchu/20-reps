@@ -5,6 +5,7 @@
   import ActivityList from '$lib/components/ActivityList.svelte';
   import { onMount } from 'svelte';
   import type { Activity } from '$lib/types';
+  import { typewriter } from '$lib/transitions';
 
   type Stats = {
     currentStreak: number;
@@ -128,7 +129,7 @@
   </div>
   <main class="container mx-auto px-4 py-10">
     {#await api.getActivities() then activities}
-      <h1 class="mb-12 text-center text-5xl font-bold">{m.title()}</h1>
+      <h1 class="mb-12 text-center text-5xl font-bold" transition:typewriter>{m.title()}</h1>
       <div class="mx-auto grid max-w-4xl grid-cols-1 gap-8 sm:grid-cols-3">
         <!-- Current Streak -->
         <div class="rounded-xl bg-white/10 p-4 text-center backdrop-blur-lg">
