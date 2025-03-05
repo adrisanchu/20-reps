@@ -48,7 +48,11 @@
    * @param from the date from
    * @param to the date to
    */
-  async function handleRequestActivities(from?: string, to?: string, qty?: number) {
+  async function handleRequestActivities(
+    from?: string,
+    to?: string,
+    qty?: number
+  ) {
     // Extract params to query based on dates
     const startTime = from ? new Date(from).getTime() / 1000 : undefined;
     const endTime = to ? new Date(to).getTime() / 1000 : undefined;
@@ -57,7 +61,7 @@
     let stravaActivities = await stv.getActivities(accessToken, {
       after: startTime,
       before: endTime,
-      per_page: perPage
+      per_page: perPage,
     });
     console.log('activities', stravaActivities);
     activities = [...stravaActivities];
@@ -147,8 +151,8 @@
               class="bg-white/10 text-white dark:[color-scheme:dark]"
               type="number"
               name="quantity"
-              min=1
-              max=150
+              min="1"
+              max="150"
               id="qty"
               bind:value={num}
             />
