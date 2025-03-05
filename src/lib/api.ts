@@ -9,9 +9,39 @@ class Api {
       });
 
       const { results } = (await res.json()) as { results: Activity[] };
+
+      // Extract extra_data as JSON whenever possible
+      results.map((res) => {
+        if (res.extra_data !== undefined) {
+          try {
+            // Parse a string into JSON
+            let obj = JSON.parse(res.extra_data);
+            res.extra_data = obj;
+          } catch (ex) {
+            console.error(ex);
+          }
+        }
+        return res;
+      });
+
       return results;
     } catch (error) {
       console.error('Error getting activities:', error);
+      return [];
+    }
+  }
+
+  public async get20RepsActivities(): Promise<Activity[]> {
+    try {
+      const res = await fetch('/api/20-reps', {
+        method: 'GET',
+        headers: { 'content-type': 'application/json' },
+      });
+
+      const { results } = (await res.json()) as { results: Activity[] };
+      return results;
+    } catch (error) {
+      console.error('Error getting 20 reps:', error);
       return [];
     }
   }
@@ -68,7 +98,6 @@ class Api {
 
       if (!res.ok) throw new Error(await res.text());
       alert('Activities saved successfully!');
-
     } catch (error) {
       console.error('Error saving activities:', error);
       alert('Failed to save activities.');

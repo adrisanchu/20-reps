@@ -27,7 +27,7 @@ export interface Activity {
   distance: number;
   moving_time: number;
   elapsed_time: number;
-  extra_data?: Record<string, any>;
+  extra_data?: string; // Record<string, any>;
 }
 
 export interface Workout {
@@ -40,10 +40,11 @@ export interface Workout {
 }
 
 export interface Stats {
-  currentStreak: number;
+  longestStreak: number;
   totalWorkouts: number;
   remainingDays: number;
-  yearProgress: number;
-  workoutCompletionRate: number;
-  daysSinceStart: number;
+  skippedDays: number;
+  // yearProgress: number;
+  // workoutCompletionRate: number;
+  // daysSinceStart: number;
 }
