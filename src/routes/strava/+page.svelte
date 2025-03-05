@@ -6,7 +6,7 @@
   import { Button } from '$lib/components/ui/button/index.js';
   import { Separator } from '$lib/components/ui/separator/index.js';
   import type { StravaActivity } from '$lib/types';
-  import { saveActivities } from '$lib/api';
+  import { api } from '$lib/api';
   import ActivityList from '$lib/components/ActivityList.svelte';
 
   // Init Strava API with client and secret
@@ -24,6 +24,7 @@
   // Dates to filter getActivities query
   let dateFrom: string = '';
   let dateTo: string = '';
+  let num: number = 100;
 
   let activities: StravaActivity[] = [];
 
@@ -47,14 +48,20 @@
    * @param from the date from
    * @param to the date to
    */
-  async function handleRequestActivities(from?: string, to?: string) {
+  async function handleRequestActivities(
+    from?: string,
+    to?: string,
+    qty?: number
+  ) {
     // Extract params to query based on dates
     const startTime = from ? new Date(from).getTime() / 1000 : undefined;
     const endTime = to ? new Date(to).getTime() / 1000 : undefined;
+    const perPage = qty ? qty : undefined;
 
     let stravaActivities = await stv.getActivities(accessToken, {
       after: startTime,
       before: endTime,
+      per_page: perPage,
     });
     console.log('activities', stravaActivities);
     activities = [...stravaActivities];
@@ -138,11 +145,23 @@
               bind:value={dateTo}
             />
           </div>
+          <div class="w-full space-y-2">
+            <Label for="qty">Quantity:</Label>
+            <Input
+              class="bg-white/10 text-white dark:[color-scheme:dark]"
+              type="number"
+              name="quantity"
+              min="1"
+              max="150"
+              id="qty"
+              bind:value={num}
+            />
+          </div>
         </div>
         <Button
           variant="secondary"
           class="font-semibold"
-          onclick={() => handleRequestActivities(dateFrom, dateTo)}
+          onclick={() => handleRequestActivities(dateFrom, dateTo, num)}
           >Get Activities</Button
         >
       </div>
@@ -156,7 +175,7 @@
         </p>
         <Button
           class="bg-sky-500 font-semibold text-foreground"
-          onclick={() => saveActivities(activities)}>Save Activities</Button
+          onclick={() => api.saveActivities(activities)}>Save Activities</Button
         >
       </div>
       <ActivityList {activities}></ActivityList>
