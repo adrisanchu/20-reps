@@ -1,38 +1,24 @@
-# sv
+# 20 Reps
+Grab your activities from Strava and start tracking your fitness progress.
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+![20-reps_v1.0.0](./20-reps_v1.0.0.png)
 
-## Creating a project
 
-If you're seeing this, you've probably already done this step. Congrats!
+## Tech Stack 
+Built using SvelteKit and Cloudflare
 
-```bash
-# create a new project in the current directory
-npx sv create
-
-# create a new project in my-app
-npx sv create my-app
+```
+npm create cloudflare@latest -- 20-reps --framework=svelte
 ```
 
-## Developing
+It uses:
+- typescript
+- tailwindcss
+- prettier
+- eslint
+- sveltekit-adapter
+- paraglide
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+> More info regarding the setup can be found [here](./svelte-cli.md)
 
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+Additionally, it uses [shadcn-svelte components](https://next.shadcn-svelte.com/) to build all the components.
