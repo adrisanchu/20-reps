@@ -23,10 +23,13 @@
   const endDate = new Date('2025-12-31');
 
   onMount(async () => {
+    console.log('mounting page. Fetching data...');
     mounted = true;
     await api.getActivities().then((data) => {
       activitiesProcessor = new ActivitiesProcessor(data, startDate, endDate);
     });
+
+    console.log('activitiesProcessor: ', activitiesProcessor);
 
     // Get 20 Reps activities
     const regex = /W[0-9]+\s-\s[0-9]+ [A-Za-z]/;
@@ -39,7 +42,9 @@
     );
 
     stats = challengeActivitiesProcessor.getStats();
+    console.log('stats: ', stats);
     ready = true;
+    console.log('component mounted');
   });
 </script>
 
