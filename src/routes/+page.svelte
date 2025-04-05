@@ -25,9 +25,13 @@
   onMount(async () => {
     console.log('mounting page. Fetching data...');
     mounted = true;
-    await api.getActivities().then((data) => {
+    try {
+      await api.getActivities().then((data) => {
       activitiesProcessor = new ActivitiesProcessor(data, startDate, endDate);
     });
+    } catch (error) {
+      console.error('Error fetching activities:', error);
+    }
 
     console.log('activitiesProcessor: ', activitiesProcessor);
 
