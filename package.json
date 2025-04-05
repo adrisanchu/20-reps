@@ -49,5 +49,8 @@
   "dependencies": {
     "@inlang/paraglide-sveltekit": "^0.11.1",
     "@tailwindcss/typography": "^0.5.15"
+  },
+  "engines": {
+    "node": ">=18.18.0"
   }
 }
