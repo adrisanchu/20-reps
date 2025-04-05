@@ -36,7 +36,10 @@
    * Environment Variables
    * https://developers.cloudflare.com/workers/wrangler/configuration/#environment-variables
    */
-  "vars": { "VITE_REDIRECT_URI": "http://20-reps.pages.dev/strava" }
+  "vars": { 
+    "VITE_REDIRECT_URI": "http://20-reps.pages.dev/strava",
+    "NODE_VERSION": "22.9.0"
+  //  }
   /**
    * Note: Use secrets to store sensitive data.
    * https://developers.cloudflare.com/workers/configuration/secrets/
