@@ -9,7 +9,7 @@ export const GET: RequestHandler = async ({ platform }) => {
   }
 
   let result = await platform?.env?.DB?.prepare(
-    'SELECT * FROM strava_activities'
+    'SELECT id, start_date, sport_type, name, distance, moving_time, elapsed_time FROM strava_activities'
   ).run();
   return new Response(JSON.stringify(result));
 };
@@ -33,7 +33,7 @@ export const POST: RequestHandler = async ({ request, platform }) => {
        ON CONFLICT(id)
        DO
         UPDATE
-        SET name = ?2, start_date = ?3, sport_type = ?4, distance = ?5, extra_data = ?6
+        SET name = ?2, start_date = ?3, sport_type = ?4, distance = ?5, moving_time = ?6, elapsed_time = ?7, extra_data = ?8
         WHERE id = ?1`
     );
 
