@@ -28,12 +28,12 @@ export const POST: RequestHandler = async ({ request, platform }) => {
 
     const db: D1Database = platform.env.DB;
     const stmt = db.prepare(
-      `INSERT INTO strava_activities (id, name, start_date, sport_type, distance, moving_time, elapsed_time, extra_data)
-       VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)
+      `INSERT INTO strava_activities (id, name, start_date, sport_type, distance, moving_time, elapsed_time)
+       VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)
        ON CONFLICT(id)
        DO
         UPDATE
-        SET name = ?2, start_date = ?3, sport_type = ?4, distance = ?5, moving_time = ?6, elapsed_time = ?7, extra_data = ?8
+        SET name = ?2, start_date = ?3, sport_type = ?4, distance = ?5, moving_time = ?6, elapsed_time = ?7
         WHERE id = ?1`
     );
 
@@ -46,7 +46,7 @@ export const POST: RequestHandler = async ({ request, platform }) => {
         activity.distance,
         activity.moving_time,
         activity.elapsed_time,
-        JSON.stringify(activity.extra_data)
+        // JSON.stringify(activity.extra_data)
       )
     );
 
