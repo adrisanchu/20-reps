@@ -44,6 +44,13 @@ export class ActivitiesProcessor {
     this.calculateStreak();
   }
 
+  private getLocalDateString(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
   /**
    * Calculate the longest streak within the activities.
    * This function loops through the given activities and their dates,
@@ -55,7 +62,7 @@ export class ActivitiesProcessor {
   private calculateStreak(): void {
     // Add all dates from datetimes for each activity
     this.activities.forEach((activity) => {
-      const date = new Date(activity.start_date).toISOString().split('T')[0];
+      const date = this.getLocalDateString(new Date(activity.start_date));
       this.activityDates.add(date);
     });
 
@@ -64,9 +71,9 @@ export class ActivitiesProcessor {
     const lastActivityDate = [...this.activityDates][0] as string;
 
     // The reference date when starting a streak
-    let stMovingDate = this.from.toISOString().split('T')[0];
+    let stMovingDate = this.getLocalDateString(this.from);
     // The moving date on the loop
-    let currentDate = this.from.toISOString().split('T')[0];
+    let currentDate = this.getLocalDateString(this.from);
     let movingStreak = 0;
 
     while (currentDate <= lastActivityDate) {
@@ -78,7 +85,6 @@ export class ActivitiesProcessor {
 
         // Add current date to skipped dates
         this.skippedDays++;
-        // TODO: Add skippedDates!
 
         // Calc previous date
         const previousDate = new Date(currentDate);
@@ -87,19 +93,17 @@ export class ActivitiesProcessor {
         // Add previous period to streaks list
         this.streaks.push({
           from: stMovingDate,
-          to: previousDate.toISOString().split('T')[0],
+          to: this.getLocalDateString(previousDate),
           days: movingStreak,
         });
 
         // Reset the values for the next iteration
         movingStreak = 0;
         previousDate.setDate(previousDate.getDate() + 2);
-        stMovingDate = previousDate.toISOString().split('T')[0];
+        stMovingDate = this.getLocalDateString(previousDate);
       }
 
       if (currentDate === lastActivityDate) {
-        // If we got here, it means that the last date 
-        // with an activity is included in the last streak
         this.streaks.push({
           from: stMovingDate,
           to: currentDate,
@@ -111,14 +115,13 @@ export class ActivitiesProcessor {
       // Increase the moving date to keep on the loop
       const tempDate = new Date(currentDate);
       tempDate.setDate(tempDate.getDate() + 1);
-      currentDate = tempDate.toISOString().split('T')[0];
+      currentDate = this.getLocalDateString(tempDate);
     }
 
     // Finally, calculate the longest streak from the streaks list
     this.longestStreak = this.streaks.reduce((a, b) =>
       a.days > b.days ? a : b
     ).days;
-    // TODO: save longestStreak as object?
   }
 
   /**
