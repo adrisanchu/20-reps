@@ -65,7 +65,7 @@ class Api {
         distance,
         moving_time,
         elapsed_time,
-        extra_data: JSON.stringify(extra), // Store all remaining properties inside extra_data
+        // extra_data: JSON.stringify(extra), // Store all remaining properties inside extra_data
       })
     );
   }
