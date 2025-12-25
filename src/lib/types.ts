@@ -48,3 +48,12 @@ export interface Stats {
   // workoutCompletionRate: number;
   // daysSinceStart: number;
 }
+
+export interface FetchProgress {
+  currentChunk: number;
+  totalChunks: number;
+  activitiesFetched: number;
+  message: string;
+}
+
+export type ProgressCallback = (progress: FetchProgress) => void;
