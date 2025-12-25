@@ -157,7 +157,9 @@ export class Strava {
     }
 
     // Calculate time-based chunks
-    const endTime = options?.before ?? Math.floor(Date.now() / 1000);
+    const now = Math.floor(Date.now() / 1000);
+    // Cap end time at current time to prevent fetching future dates
+    const endTime = options?.before ? Math.min(options.before, now) : now;
     const startTime = options?.after ?? endTime - 365 * 24 * 60 * 60; // Default 1 year
 
     // Calculate total chunks
