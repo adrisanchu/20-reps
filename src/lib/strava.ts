@@ -166,13 +166,6 @@ export class Strava {
     const totalDuration = endTime - startTime;
     const estimatedChunks = Math.ceil(totalDuration / CHUNK_DURATION);
 
-    console.log('Chunking setup:', {
-      startTime: new Date(startTime * 1000).toISOString(),
-      endTime: new Date(endTime * 1000).toISOString(),
-      totalDuration: totalDuration / (24 * 60 * 60),
-      estimatedChunks,
-    });
-
     let currentChunkStart = startTime;
     let currentChunkNumber = 0;
 
@@ -193,11 +186,6 @@ export class Strava {
       });
 
       try {
-        console.log(`Fetching chunk ${currentChunkNumber}:`, {
-          from: new Date(currentChunkStart * 1000).toISOString(),
-          to: new Date(currentChunkEnd * 1000).toISOString(),
-        });
-
         // Fetch this chunk with retry logic
         const chunkActivities = await this.fetchWithRetry(accessToken, {
           after: currentChunkStart,
@@ -205,31 +193,24 @@ export class Strava {
           per_page: MAX_PER_PAGE,
         });
 
-        console.log(`Chunk ${currentChunkNumber} returned ${chunkActivities.length} activities`);
-
         // Prepend chunk activities to maintain newest-first order
         // (since we fetch oldest chunks first, but Strava returns newest-first within each chunk)
         allActivities = [...chunkActivities, ...allActivities];
 
-        console.log(`Total activities so far: ${allActivities.length}`);
-
         // Move to next chunk (continue through entire date range)
         currentChunkStart = currentChunkEnd;
-        console.log(`Next chunk will start at: ${new Date(currentChunkStart * 1000).toISOString()}`);
       } catch (error) {
         // If chunk fails after retries, throw with context
+        console.error(`Error fetching chunk ${currentChunkNumber} out of ${estimatedChunks}:`, {
+          from: new Date(currentChunkStart * 1000).toISOString(),
+          to: new Date(currentChunkEnd * 1000).toISOString(),
+          error: `${error instanceof Error ? error.message : 'Unknown error'}`
+        });
         throw new Error(
           `Failed to fetch activities (chunk ${currentChunkNumber} of ${estimatedChunks}): ${error instanceof Error ? error.message : 'Unknown error'}`
         );
       }
     }
-
-    console.log('Chunking complete. Loop ended with:', {
-      currentChunkStart: new Date(currentChunkStart * 1000).toISOString(),
-      endTime: new Date(endTime * 1000).toISOString(),
-      totalActivities: allActivities.length,
-      chunksProcessed: currentChunkNumber,
-    });
 
     // Final progress update
     onProgress?.({
