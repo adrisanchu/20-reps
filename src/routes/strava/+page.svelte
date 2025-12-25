@@ -5,9 +5,10 @@
   import { Label } from '$lib/components/ui/label/index.js';
   import { Button } from '$lib/components/ui/button/index.js';
   import { Separator } from '$lib/components/ui/separator/index.js';
-  import type { StravaActivity } from '$lib/types';
+  import type { StravaActivity, FetchProgress } from '$lib/types';
   import { api } from '$lib/api';
   import ActivityList from '$lib/components/ActivityList.svelte';
+  import StravaFetchProgress from '$lib/components/StravaFetchProgress.svelte';
 
   // Init Strava API with client and secret
   const stv: Strava = new Strava(
@@ -17,19 +18,31 @@
 
   console.log('page', page.url);
 
-  // Get temporary code after redirect from Strava
-  let code: string = page.url.searchParams.get('code') || '';
-  let accessToken: string = '';
+  // Get temporary code after redirect from Strava (read once from URL, doesn't need reactivity)
+  const code = page.url.searchParams.get('code') || '';
 
-  // Dates to filter getActivities query
-  let dateFrom: string = '';
-  let dateTo: string = '';
-  let num: number = 100;
+  // Access token needs to be reactive as it's updated by handleAccessToken()
+  let accessToken = $state('');
 
-  let activities: StravaActivity[] = [];
+  // Dates to filter getActivities query (reactive for two-way binding with inputs)
+  let dateFrom = $state('');
+  let dateTo = $state('');
+  let num = $state(100);
 
+  // Activities array (reactive as it's updated by fetch)
+  let activities = $state<StravaActivity[]>([]);
+
+  // Progress tracking state
+  let isFetching = $state(false);
+  let fetchProgress = $state({
+    currentChunk: 0,
+    totalChunks: 1,
+    activitiesFetched: 0,
+    message: 'Preparing to fetch activities...',
+  });
+
+  // Set temporary code immediately (runs once on component init)
   if (code !== '') {
-    // Add temporary code to Strava class for further use
     stv.temporaryCode = code;
   }
 
@@ -43,33 +56,84 @@
   }
 
   /**
-   * Handles the request for activities from Strava,
-   * based on the provided date range.
+   * Handles the request for activities from Strava with chunking and retry logic.
+   * Shows progress UI and handles errors gracefully.
    * @param from the date from
    * @param to the date to
+   * @param qty the quantity of activities to fetch
    */
   async function handleRequestActivities(
     from?: string,
     to?: string,
     qty?: number
   ) {
-    // Extract params to query based on dates
-    const startTime = from ? new Date(from).getTime() / 1000 : undefined;
-    const endTime = to ? new Date(to).getTime() / 1000 : undefined;
-    const perPage = qty ? qty : undefined;
+    // Reset state
+    isFetching = true;
+    activities = [];
+    fetchProgress = {
+      currentChunk: 0,
+      totalChunks: 1,
+      activitiesFetched: 0,
+      message: 'Collecting activities from Strava...',
+    };
 
-    let stravaActivities = await stv.getActivities(accessToken, {
-      after: startTime,
-      before: endTime,
-      per_page: perPage,
-    });
-    console.log('activities', stravaActivities);
-    activities = [...stravaActivities];
+    try {
+      // Convert dates to Unix timestamps
+      const startTime = from ? new Date(from).getTime() / 1000 : undefined;
+      const endTime = to ? new Date(to).getTime() / 1000 : undefined;
+      const perPage = qty ? qty : undefined;
+
+      // Fetch with progress tracking
+      const stravaActivities = await stv.getActivitiesWithChunking(
+        accessToken,
+        {
+          after: startTime,
+          before: endTime,
+          per_page: perPage,
+        },
+        // Progress callback
+        (progress: FetchProgress) => {
+          fetchProgress = progress;
+        }
+      );
+
+      console.log('activities fetched:', stravaActivities);
+      activities = [...stravaActivities];
+
+      // Success message
+      fetchProgress.message = `Successfully loaded ${activities.length} activities!`;
+
+      // Keep success message visible briefly before hiding overlay
+      setTimeout(() => {
+        isFetching = false;
+      }, 1000);
+    } catch (error) {
+      console.error('Error fetching activities:', error);
+
+      // User-friendly error message
+      const errorMessage =
+        error instanceof Error ? error.message : 'An unexpected error occurred';
+
+      alert(
+        `Failed to fetch activities: ${errorMessage}\n\nPlease try again or use a smaller date range.`
+      );
+
+      isFetching = false;
+    }
   }
 </script>
 
 <main class="mx-auto flex max-w-xl flex-col justify-center px-4 py-10">
   <h1 class="mb-12 text-center text-5xl font-bold">Strava API</h1>
+
+  <!-- Progress overlay -->
+  <StravaFetchProgress
+    visible={isFetching}
+    currentChunk={fetchProgress.currentChunk}
+    totalChunks={fetchProgress.totalChunks}
+    activitiesFetched={fetchProgress.activitiesFetched}
+    message={fetchProgress.message}
+  />
 
   <div class="flex flex-col gap-4">
     {#if !accessToken}
@@ -86,7 +150,7 @@
             type="text"
             name="code"
             id="code"
-            bind:value={code}
+            value={code}
             disabled
           />
           <p class="text-sm text-muted-foreground">
@@ -162,7 +226,8 @@
           variant="secondary"
           class="font-semibold"
           onclick={() => handleRequestActivities(dateFrom, dateTo, num)}
-          >Get Activities</Button
+          disabled={isFetching}
+          >{isFetching ? 'Fetching...' : 'Get Activities'}</Button
         >
       </div>
     {/if}
@@ -175,7 +240,9 @@
         </p>
         <Button
           class="bg-sky-500 font-semibold text-foreground"
-          onclick={() => api.saveActivities(activities)}>Save Activities</Button
+          onclick={() => api.saveActivities(activities)}
+          disabled={isFetching}
+          >Save Activities</Button
         >
       </div>
       <ActivityList {activities}></ActivityList>
