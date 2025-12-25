@@ -16,8 +16,6 @@
     import.meta.env.VITE_STRAVA_CLIENT_SECRET
   );
 
-  console.log('page', page.url);
-
   // Get temporary code after redirect from Strava (read once from URL, doesn't need reactivity)
   const code = page.url.searchParams.get('code') || '';
 
@@ -97,7 +95,6 @@
         }
       );
 
-      console.log('activities fetched:', stravaActivities);
       activities = [...stravaActivities];
 
       // Success message

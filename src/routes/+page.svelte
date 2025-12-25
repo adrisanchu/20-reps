@@ -23,7 +23,6 @@
   const endDate = new Date('2025-12-31');
 
   onMount(async () => {
-    console.log('mounting page. Fetching data...');
     mounted = true;
     try {
       await api.getActivities().then((data) => {
@@ -48,7 +47,6 @@
     stats = challengeActivitiesProcessor.getStats();
     console.log('stats: ', stats);
     ready = true;
-    console.log('component mounted');
   });
 </script>
 
